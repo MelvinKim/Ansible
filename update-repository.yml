@@ -1,0 +1,9 @@
+- hosts: myhost
+  become: true
+  gather_facts: True
+
+  tasks:
+    - name: Install apache2 package
+      apt:
+        name: apache2
+
