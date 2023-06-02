@@ -57,6 +57,7 @@
         groups: myhosts
 
 - hosts: myhosts
+  become: true
   tasks: 
   - name: Update package repositories
     apt:
