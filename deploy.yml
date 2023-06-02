@@ -1,6 +1,5 @@
 - hosts: localhost
   become: yes
-  become_user: jenkins
 
   tasks:
     - name: Create a security group
@@ -59,7 +58,6 @@
 
 - hosts: myhosts
   become: yes
-  become_user: jenkins
   tasks: 
   - name: Update package repositories
     apt:
