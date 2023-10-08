@@ -33,7 +33,7 @@
       state: present
   - name: Add user to the docker group
     user:
-      name: root
+      name: root # modify this to include my current logged in user
       groups: docker
       append: yes
   - name: Restart Docker service
