@@ -26,3 +26,18 @@ ansible-playbook -i hosts prometheus.yaml
 ```shell
 ansible-playbook -i hosts node-exporter.yaml
 ```
+
+### PromQL
+1. Number of running containers (when using docker compose)
+```
+count(container_memory_usage_bytes{container_label_com_docker_compose_service != ""})
+```
+2. Average CPU utilization, expressed as a percentage
+```
+100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[24h])) * 100)
+```
+3. Average Memory utilization, expressed as a percentage
+```
+100 - (avg_over_time(node_memory_MemAvailable_bytes[24h]) / avg_over_time(node_memory_MemTotal_bytes[24h]) * 100)
+```
+
