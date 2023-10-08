@@ -40,3 +40,19 @@
     service:
       name: docker
       state: restarted
+  - name: create a docker engine metrics configuration file
+    file:
+      path: /etc/docker/daemon.json
+      state: touch
+  - name: add docker engine metrics configuration
+    lineinfile:
+      path: /etc/docker/daemon.json
+      line: |
+        {
+          "metrics-addr" : "127.0.0.1:9323",
+          "experimental" : true
+        }
+  - name: restart docker service
+    command: systemctl restart docker
+  - name: test everything
+    command: curl localhost:9323/metrics
