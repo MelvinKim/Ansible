@@ -1,0 +1,42 @@
+- hosts: webservers
+  become: yes
+  tasks: 
+  - name: Update package repositories
+    apt:
+      update_cache: yes
+  - name: Install aptitude
+    apt:
+      name: aptitude
+      state: latest
+  - name: Install required system packages
+    apt:
+      pkg:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - python3-pip
+        - virtualenv
+        - python3-setuptools
+      state: latest
+  - name: Add Docker GPG apt Key
+    apt_key:
+      url: 'https://download.docker.com/linux/ubuntu/gpg'
+      state: present
+  - name: Add Docker Repository
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu focal stable
+      state: present
+  - name: Install Docker
+    apt:
+      name: docker.io
+      state: present
+  - name: Add user to the docker group
+    user:
+      name: root
+      groups: docker
+      append: yes
+  - name: Restart Docker service
+    service:
+      name: docker
+      state: restarted
