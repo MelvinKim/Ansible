@@ -52,5 +52,3 @@
         "experimental" : true
       }
   notify: restart docker service
-- name: test everything
-  command: curl localhost:9323/metrics
