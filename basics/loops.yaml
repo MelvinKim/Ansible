@@ -1,0 +1,10 @@
+host: webservers
+task:
+  - name: ensure all template files are rendered
+    template:
+      src: '{{ item.src  }}'
+      dest: '{{ item.dest }}'
+    loop:
+      - { src: 'templates/myapp_cfg.j2', dest: '/home/joe/myapp.cfg'}
+      - { src: 'templates/index.html.j2', dest: '/var/www/index.html'}
+      - { src: 'templates/config_xml.j2', dest: '/tmp/config.xml'}

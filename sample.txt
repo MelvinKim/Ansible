@@ -1,0 +1,28 @@
+Method not allowed error:
+12:09:03.756        INFO        POST Request : url=http://rw-stage-sasa.kokonetworks.com/shop/login (redirected) 
+ path_url=/shop/login 
+ headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '542'} 
+ body={
+    "agent_id": 554,
+    "event_details": {
+        "application": {
+            "name": "KokoSasa Go",
+            "screen": "com.kokonetworks.kokosasa.ui.login.fragments.LoginFragment"
+        },
+        "device": {
+            "android_id": "32d4fb838c2c052e",
+            "android_version": "29 Q",
+            "baseband_version": "MOLY.LR12A.R3.MP.V119.5.P5,MOLY.LR12A.R3.MP.V119.5.P5",
+            "kernel_version": "4.14.141",
+            "model": "MobiGo2"
+        }
+    },
+    "pin": "9633",
+    "shop_id": 555,
+    "user_id": 10
+} 
+         
+12:09:03.757        INFO        GET Response : url=https://rw-stage-sasa.kokonetworks.com:443/shop/login 
+ status=405, reason=METHOD NOT ALLOWED 
+ headers={'Date': 'Wed, 18 Oct 2023 09:09:03 GMT', 'Content-Type': 'application/json', 'Content-Length': '64', 'Connection': 'keep-alive', 'Server': 'gunicorn/20.0.4', 'Allow': 'POST, OPTIONS', 'Access-Control-Allow-Origin': '*'} 
+ body={"message": "The method is not allowed for the requested URL."}

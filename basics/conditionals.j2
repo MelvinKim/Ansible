@@ -1,0 +1,11 @@
+{% if tickets %}
+    We are going to {{ concert_name }}!
+{% elif picnic %}
+    Let's get prepared for a picnic!
+{% else %}
+    This will be a boring weekend!
+{% endif %}
+
+{% if app_port is defined %}
+    Port={{ app_port }}
+{% endif %}
