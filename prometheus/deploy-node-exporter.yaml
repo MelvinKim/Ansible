@@ -1,13 +1,12 @@
 ---
-- name: Setup prometheus
+- name: Setup Node Exporter
   hosts: webservers
   gather_facts: true
   become: true
-  roles:    
-  - prometheus
-   
+  roles:
+  - node-exporter
     
     
-
-   
+    
+    
         

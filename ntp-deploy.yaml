@@ -1,0 +1,6 @@
+---
+- name: deploy ntp
+  hosts: webservers
+  become: yes
+  roles:
+  - ntp
