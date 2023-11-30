@@ -1,2 +1,50 @@
 ---
-# tasks file for alertmanager
+- name: Download alertmanager
+  command: wget https://github.com/prometheus/alertmanager/releases/download/v0.26.0/alertmanager-0.26.0.linux-amd64.tar.gz
+- name: extract alertmanager
+  command: tar -zvf https://github.com/prometheus/alertmanager/releases/download/v0.26.0/alertmanager-0.26.0.linux-amd64.tar.gz
+- name: move alertmanager to /etc folder
+  command: mv -v alertmanager-0.26.0.linux-amd64 /etc/alertmanager
+- name: change user and group permissions of folders to root
+  file:
+    path: /etc/alertmanager
+    owner: root
+    group: root
+- name: create directory data for alertmanager
+  command: mkdir -v /etc/alertmanager/data
+- name: change ownership of alertmanager data directory to alertmanager
+  file:
+    path: /etc/alertmanager/data
+    owner: prometheus
+    group: prometheus
+- name: create alertmanager service file
+  file:
+    path: /etc/systemd/system/alertmanager.service
+- name: add alertmanager service configuration data
+  lineinfile:
+    path: /etc/systemd/system/alertmanager.service
+    line: |
+      [Unit]
+      Description=Alertmanager for alertmanager
+
+      [Service]
+      Restart=always
+      User=prometheus
+      ExecStart=/etc/alertmanager/alertmanager --config.file=/etc/alertmanager/alertmanager.yml --storage.path=/etc/alertmanager/data            
+      ExecReload=/bin/kill -HUP $MAINPID
+      TimeoutStopSec=20s
+      SendSIGKILL=no
+
+      [Install]
+      WantedBy=multi-user.target
+- name: reload systemd
+  command: systemctl daemon-reload
+- name: start alertmanager service
+  systemd:
+    name: alertmanager
+    state: started
+- name: enable alertmanager
+  command: systemctl enable alertmanager.service
+- name: check alertmanager status
+  command: systemctl status alertmanager
+

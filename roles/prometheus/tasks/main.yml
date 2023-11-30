@@ -108,11 +108,11 @@
       [Install]
       WantedBy=multi-user.target
   notify: reload systemd
-- name: enable prometheus
-  command: systemctl enable prometheus
 - name: start prometheus service
   systemd:
     name: prometheus
     state: started
+- name: enable prometheus
+  command: systemctl enable prometheus
 - name: check prometheus status
   command: systemctl status prometheus
