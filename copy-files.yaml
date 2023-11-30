@@ -1,0 +1,9 @@
+- hosts: webservers
+  become: yes
+  tasks:
+    - name: copy files dockerfiles
+      synchronize:
+        src: ~/playground/github-repos/microservices-demo/src
+        dest: /root
+        
+  
