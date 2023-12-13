@@ -1,4 +1,4 @@
-- hosts: webservers
+- hosts: prometheues
   become: yes
   roles:
   - alertmanager
