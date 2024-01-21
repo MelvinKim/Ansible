@@ -1,0 +1,6 @@
+---
+# tasks file for logstash
+- name: install logstash
+  apt: 
+    name: logstash
+    state: present

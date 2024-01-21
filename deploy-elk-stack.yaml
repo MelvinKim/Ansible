@@ -1,0 +1,14 @@
+---
+- name: Setup ELK stack
+  hosts: elk-stack
+  gather_facts: true
+  roles:
+  - elasticsearch
+  - kibana
+  - logstash
+
+# These roles covers the only installation on the various components on Ubuntu VMs
+# But doesn't include the configurations
+# For a more detailed guide, check: https://www.digitalocean.com/community/tutorials/how-to-install-elasticsearch-logstash-and-kibana-elastic-stack-on-ubuntu-22-04
+# Useful links 
+# https://www.linkedin.com/pulse/using-ansible-configure-aws-ec2-instance-starting-apache-rahul-sarkar/
