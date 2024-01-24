@@ -1,0 +1,47 @@
+groups:
+- name: k8sNodes
+  rules:
+    - alert: KubernetesNodesNotReady
+      expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Node not ready (instance {{ $labels.instance }})
+        description: Node {{ $labels.node }} has been unready for the last 5 minutes
+
+    - alert: KubernetesNodeMemoryPressure
+      expr: kube_node_status_condition{condition="MemoryPressure",status="true"} == 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Node memory pressure (instance {{ $labels.instance }})
+        description: |
+          Node {{ $labels.node }} has {{ $labels.condition }} condition
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+    - alert: KubernetesNodeDiskPressure
+      expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Node disk pressure (instance {{ $labels.instance }})
+        description: |
+          Node {{ $labels.node }} has {{ $labels.condition }} condition
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+
+
+

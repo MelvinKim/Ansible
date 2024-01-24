@@ -1,0 +1,7 @@
+---
+- name:  copy alert rules to remote server 
+  hosts: prometheus
+  gather_facts: true
+  become: true
+  roles:
+  - alerts
