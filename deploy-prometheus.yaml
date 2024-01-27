@@ -1,6 +1,6 @@
 ---
 - name: Setup prometheus
-  hosts: prometheues
+  hosts: prometheus
   gather_facts: true
   become: true
   roles:    
