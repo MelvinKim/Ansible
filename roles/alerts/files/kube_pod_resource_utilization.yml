@@ -1,0 +1,70 @@
+
+groups:
+- name: KubePodResources
+  rules:
+    - alert: KubernetesPodContainerMemoryRequestsUtilization
+      expr: sum by (namespace, pod, country, environment, container) (container_memory_working_set_bytes{namespace!="kube-system"}) / sum by (namespace, pod, country, environment, container) (kube_pod_container_resource_requests{namespace!="kube-system", resource="memory"}) * 100 > 80
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        summary: Kubernetes Pod Memory Requests utilization
+        description: |
+          Container {{ $labels.container }} in {{ $labels.namespace }} / {{ $labels.pod }} has exceeded 80% Memory utilization against requests.
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+
+    - alert: KubernetesPodContainerMemoryLimitsUtilization
+      expr: sum by (namespace, pod, country, environment, container) (container_memory_working_set_bytes{namespace!="kube-system"}) / sum by (namespace, pod, country, environment, container) (kube_pod_container_resource_limits{resource="memory", namespace!="kube-system"}) * 100 > 80
+      for: 15m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Pod Memory Limits utilization
+        description: |
+          Container {{ $labels.container }} in {{ $labels.namespace }} / {{ $labels.pod }} has exceeded 80% Memory utilization against limits.
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+    
+    - alert: KubernetesContainerCPURequestUtilization
+      expr: sum(rate(container_cpu_usage_seconds_total{namespace!="kube-system"}[1m])) by (container, pod, country, environment, container, namespace) / sum by (container, pod, country, environment, container) (kube_pod_container_resource_requests{namespace!="kube-system", resource="cpu"})  * 100 > 80
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: Kubernetes Container CPU Usage vs Requests
+        description: |
+          Container {{ $labels.container }} in {{ $labels.namespace }} / {{ $labels.pod }} has exceeded 80% CPU utilization against set requests.
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+
+    - alert: KubernetesContainerCPULimitsUtilization
+      expr: sum(rate(container_cpu_usage_seconds_total{namespace!="kube-system"}[1m])) by (container, pod, country, environment, container, namespace) / sum by (container, pod, country, environment, container) (kube_pod_container_resource_limits{namespace!="kube-system", resource="cpu"})  * 100 > 80
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Container CPU Usage vs Limits
+        description: |
+          Container: {{ $labels.container }} in {{ $labels.namespace }} / {{ $labels.pod }} has exceeded 80% CPU utilization against set Limits.
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+

@@ -1,0 +1,71 @@
+# https://samber.github.io/awesome-prometheus-alerts/rules.html#kubernetes
+
+groups:
+- name: KubeHPA
+  rules:
+    - alert: KubernetesHpaScaleInability
+      expr: kube_horizontalpodautoscaler_status_condition{status="false", condition="AbleToScale", environment!="prod-int"} == 1
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: Kubernetes HPA scale inability (instance {{ $labels.instance }})
+        description: |
+          HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }} is unable to scale
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+    - alert: KubernetesHpaMetricsUnavailability
+      expr: kube_horizontalpodautoscaler_status_condition{status="false", condition="ScalingActive", environment!="prod-int"} == 1
+      for: 0m
+      labels:
+        severity: warning
+      annotations:
+        summary: Kubernetes HPA metrics unavailability (instance {{ $labels.instance }})
+        description: |
+          HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }} is unable to collect metrics  
+          
+          VALUE = {{ $value }}
+          
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+
+    - alert: KubernetesHpaScaleMaximum
+      expr: kube_horizontalpodautoscaler_status_desired_replicas{environment!="prod-int"} >= kube_horizontalpodautoscaler_spec_max_replicas{environment!="prod-int"}
+      for: 30m
+      labels:
+        severity: warning
+      annotations:
+        summary: Kubernetes HPA scale maximum (instance {{ $labels.instance }})
+        description: |
+          HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }} has hit maximum number of desired pods
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+
+    - alert: KubernetesHpaUnderutilized
+      expr: max(quantile_over_time(0.5, kube_horizontalpodautoscaler_status_desired_replicas{environment!="prod-int"}[1d]) == kube_horizontalpodautoscaler_spec_min_replicas{environment!="prod-int"}) by (horizontalpodautoscaler, country, environment, namespace) > 3
+      for: 30m
+      labels:
+        severity: info
+      annotations:
+        summary: Kubernetes HPA underutilized (instance {{ $labels.instance }})
+        description: |
+          
+          HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }} is constantly at minimum replicas for 50% of the time. Potential cost saving here.
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}

@@ -1,0 +1,102 @@
+# https://samber.github.io/awesome-prometheus-alerts/rules.html#kubernetes
+
+
+groups:
+- name: KubeNodes
+  rules:
+    - alert: KubernetesNodeMemoryPressure
+      expr: kube_node_status_condition{condition="MemoryPressure",status="true"} == 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Node memory pressure (instance {{ $labels.instance }})
+        description: |
+          Node {{ $labels.node }} has {{ $labels.condition }} condition
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+
+    - alert: KubernetesNodeDiskPressure
+      expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Node disk pressure (instance {{ $labels.instance }})
+        description: |
+          Node {{ $labels.node }} has {{ $labels.condition }} condition
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+    - alert: KubernetesNodeNetworkUnavailable
+      expr: kube_node_status_condition{condition="NetworkUnavailable",status="true"} == 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Node network unavailable (instance {{ $labels.instance }})
+        description: |
+          Node {{ $labels.node }} has {{ $labels.condition }} condition
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+    - alert: KubernetesNodePIDPRessure
+      expr: kube_node_status_condition{condition="PIDPressure",status="true"} == 1
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Node PID Pressure (instance {{ $labels.instance }})
+        description: |
+          Node {{ $labels.node }} is experiencing {{ $labels.condition }} condition
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+
+    - alert: KubernetesNodeOutOfPodCapacity
+      expr: sum by (node, country, environment) ((kube_pod_status_phase{phase="Running"} == 1) + on(uid) group_left(node, country, environment) (0 * kube_pod_info{pod_template_hash=""})) / sum by (node, country, environment) (kube_node_status_allocatable{resource="pods"}) * 100 > 90
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: Kubernetes Node out of pod capacity (instance {{ $labels.instance }})
+        description: |
+          Node {{ $labels.node }} is out of pod capacity
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+
+    - alert: KubernetesNodeNotReady
+      expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+      for: 10m
+      labels:
+        severity: critical
+      annotations:
+        summary: Kubernetes Node not ready (instance {{ $labels.instance }})
+        description: |
+          Node {{ $labels.node }} has been unready for a long time
+          
+          VALUE = {{ $value }}
+
+          COUNTRY: {{ $labels.country }}
+          ENVIRONMENT: {{ $labels.environment }}
+          NAMESPACE: {{ $labels.namespace }}
+          
