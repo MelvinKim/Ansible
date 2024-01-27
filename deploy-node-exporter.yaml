@@ -1,6 +1,6 @@
 ---
 - name: Setup Node Exporter
-  hosts: prometheues
+  hosts: prometheus
   gather_facts: true
   become: true
   roles:

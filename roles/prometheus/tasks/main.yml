@@ -108,6 +108,12 @@
       [Install]
       WantedBy=multi-user.target
   notify: reload systemd
+- name: Copy prometheus config file
+  ansible.builtin.copy:
+    src: "files/prometheus.yaml"
+    dest: "/etc/prometheus/prometheus.yml"
+  notify: restart prometheus
+  tags: copy_config_file
 - name: start prometheus service
   systemd:
     name: prometheus
