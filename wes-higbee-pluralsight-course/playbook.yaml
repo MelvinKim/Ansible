@@ -1,0 +1,30 @@
+- name: Copy Module Test
+  hosts: localhost
+  tasks:
+  - name: Copy Module
+    ansible.builtin.copy:
+      dest: hello
+      content: world
+    tags: copy-module
+  - name: Command Module
+    ansible.builtin.command:
+      cmd: date
+    tags: command-module
+  - name: Install Nginx
+    ansible.builtin.apt:
+      update_cache: true
+      name:
+        - nginx
+    tags: nginx
+
+- name: Controller equirements
+  hosts: localhost
+  tasks:
+  - name: Install Ansible-lint
+    ansible.builtin.pip:
+      name:
+        - ansible-lint
+    tags: ansible-lint
+
+
+# ansible-playbook <playbook-file>
